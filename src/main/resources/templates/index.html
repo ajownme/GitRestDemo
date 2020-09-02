@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<style>
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<h1>Search for a public project (also called repository) hosted on the GitHub platform.</h1>
+
+		<br></br>
+		<label for="cars">Search By:</label> <select name="searchBy" id="searchBy">
+			<option value="BY_OWNER">Project Owner</option>
+			<option value="IN_REPO_NAME">Project Name</option>
+			<option value="BY_OWNER_SLASH_REPO_NAME">Project Owner and
+				Name</option>
+		</select> <label for="searchText">Search here:</label> <input type="text" id="searchText" name="searchText"><br>
+		<br>
+
+		<button type="button" id="myBtn" onclick="clickBtn()">Search
+			Now</button>
+
+		<a href="#" id="increPage" onclick="decrePaging() " class="newer previous paging">&laquo; Newer</a> <a href="#"
+			id="decrePage" onclick="increPaging()" class="older paging">Older
+			&raquo;</a>
+
+		<table id="container"  class="table table-striped table-bordered">
+			<thead>
+				<tr class="table-info">
+					<th scope="col">Id</th>
+					<th scope="col">Name</th>
+					<th scope="col">URL</th>
+					<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+	</div>
+
+
+		<script>
+			jQuery(document).ready(function ($) {
+
+				document.getElementById("searchText").value = "mojombo";
+
+				$(function () {
+					$(this).find('.dropdown-toggle').dropdown();
+
+					$('.rowlink').on('click', function (e) {
+						$(this).find('.dropdown').toggleClass('open');
+						e.stopPropagation();
+					});
+				});
+			});
+
+
+			let page = 1;
+			function increPaging(param) {
+				if (page <= 20) {
+					page++;
+					searchAjax();
+				}
+				console.log("increPaging" + page);
+
+			}
+			function decrePaging(param) {
+				if (page > 1) {
+					page--;
+					searchAjax();
+				}
+				console.log("decrePaging" + page);
+
+			}
+			function analyticPageRequest(repoUrl) {
+				console.log("call analytic page here" + repoUrl);
+				var string = repoUrl;
+				var repo = string.substring(string.indexOf("com/") + 4);
+
+				window.location = '/analytic?repo=' + repo;
+			}
+
+			function clickBtn() {
+				page = 1;
+				document.getElementById("myBtn").disabled = true;
+				searchAjax();
+				setTimeout("EnableTheButton();", 1500);
+				$(".paging").show();
+			}
+
+			function EnableTheButton() {
+				document.getElementById("myBtn").disabled = false;
+			}
+			function searchAjax() {
+				console.log("page=" + page);
+				console.log("window.location=" + window.location + "search");
+				$.ajax("search", {
+					type: 'POST', 
+					data: JSON.stringify({
+						"searchBy": document
+							.getElementById("searchBy").value,
+						"searchText": document
+							.getElementById("searchText").value,
+						"page": page
+					}),
+					dataType: 'json',		
+					contentType: "application/json",
+					success: function (data) {
+						console.log("SUCCESS" + data);
+
+
+						var statusHTML = '';
+						$.each(data.items, function (rowIndex, rowData) {
+							console.log("rowIndex" + rowIndex);
+							statusHTML += '<tr class="rowlink">'
+							statusHTML += '<td><a class="dropdown-toggle rowlink" data-toggle="dropdown"'
+								+ 'style="text-decoration: none; color: inherit;"> ' + rowData.id + ' </a></td>';
+							statusHTML += '<td><a class="dropdown-toggle rowlink" data-toggle="dropdown"'
+								+ 'style="text-decoration: none; color: inherit;"> ' + rowData.name + ' </a></td>';
+							statusHTML += '<td><a class="dropdown-toggle rowlink" data-toggle="dropdown"'
+								+ 'style="text-decoration: none; color: inherit;"> ' + rowData.html_url + ' </a></td>';
+							statusHTML += '<td>'
+								+ '<div class="dropdown">'
+								+ '<a class="dropdown-toggle rowlink" data-toggle="dropdown">'
+								+ 'View Analytics </a>'
+								+ '<ul id="act" class="dropdown-menu" role="menu"'
+								+ 'aria-labelledby="dLabel">'
+								+ '<li id="act1"><a tabindex="-1" href="all-committer?repo=' + rowData.html_url.substring(rowData.html_url.indexOf("com/") + 4) + '"> All Committer </a></li>'
+								+ '<li d="act2"><a itabindex="-1" href="latest-committer?repo=' + rowData.html_url.substring(rowData.html_url.indexOf("com/") + 4) + '"> 100 Latest Committer: Number of Commit'
+								+ '</a></li>'
+								+ '<li id="act1"><a tabindex="-1" href="latest-timeline?repo=' + rowData.html_url.substring(rowData.html_url.indexOf("com/") + 4) + '">  100 Latest Committer:Timeline of Commit </a></li>'
+								+ '</ul>'
+								+ '</div>'
+								+ '</td>';
+							statusHTML += '</tr>';
+						});
+
+						$('tbody').html(statusHTML);
+
+					},
+					error: function (e) {
+						console.log("ERROR: ", e);
+					}
+				});
+			}
+
+
+			$('#container').on('click', 'tr td div ul#act', function () {
+				console.log("check");
+				var $row = jQuery(this).closest('tr');
+				var $columns = $row.find('td a');
+				console.log("inneRme" + $columns[2].innerHTML);
+
+
+			});
+
+		</script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div class="container">
+		<h1 th:text="'Repository= https://github.com/' + ${repo} "></h1>
+		<p hidden="true" id="repoBase" th:text="${repo} "></p>
+
+		<h4>List of all committer(user)</h4>
+		<br></br>
+
+		<a href="#" id="increPage" onclick="decrePaging() " class="newer previous paging">&laquo; Newer</a> <a href="#"
+			id="decrePage" onclick="increPaging()" class="older paging">Older &raquo;</a>
+
+		<div class="table-responsive">
+			<table id="container" class="table table-bordered">
+				<thead>
+					<tr class="table-info">
+						<th scope="col">Name</th>
+						<th scope="col">Email</th>
+						<th scope="col">Commit Date</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+		<script>
+			jQuery(document).ready(function ($) {
+				getCommiterAjax();
+			});
+			let page = 1;
+			function increPaging(param) {
+				if (page < 20) {
+					page++;
+					getCommiterAjax();
+				}
+				console.log("increPaging" + page);
+
+			}
+
+			function decrePaging(param) {
+				if (page > 1) {
+					page--;
+					getCommiterAjax();
+				}
+				console.log("decrePaging" + page);
+
+			}
+
+
+			function clickBtn() {
+				page = 1;
+				getCommiterAjax();
+
+			}
+
+			function getCommiterAjax() {
+				$.ajax("get-all-committer", {
+					type: 'POST', 
+					data: {
+						'repository': document.getElementById("repoBase").textContent,
+						'page': page
+					},
+					dataType: 'json',	
+					success: function (data) {
+
+						var statusHTML = '';
+						$.each(data, function (rowIndex, rowData) {
+							console.log("row:" + rowIndex + " data:" + JSON.stringify(rowData.commit.committer));
+
+							statusHTML += '<tr class="clickable-row"><a href="/greeting">';
+							statusHTML += '<td>'
+								+ rowData.commit.committer.name + '</td>';
+							statusHTML += '<td>'
+								+ rowData.commit.committer.email
+								+ '</td>';
+							statusHTML += '<td>'
+								+ rowData.commit.committer.date
+								+ '</td>';
+							statusHTML += '</a></tr>';
+
+						});
+						$('tbody').html(statusHTML);
+
+
+					},
+					error: function (e) {
+						console.log("ERROR: ", e);
+					}
+				});
+			}
+		</script>
+</body>
+
+</html>
