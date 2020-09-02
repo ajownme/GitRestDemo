@@ -20,6 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+/**
+ * This service class has the github REST related services
+ * 
+ * @author Arjay C Jesalva
+ * @since 2020-09-02
+ */ 
 
 @Service
 public class GitRestService {

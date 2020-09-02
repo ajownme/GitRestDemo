@@ -5,6 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+
+/**
+ * This DTO class is part of the @see com.example.demo.dto.RepoBaseInfoDTO
+ *  is to hold the item information of a github repository
+ * 
+ * @author Arjay C Jesalva
+ * @since 2020-09-02
+ */ 
+
 @Data
 public class ItemDTO {
 

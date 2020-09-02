@@ -15,6 +15,14 @@ import com.example.demo.dto.SearchDTO;
 import lombok.Data;
 import springfox.documentation.annotations.ApiIgnore;
 
+
+/**
+ * This controller class defines the UI endpoints to render html pages
+ * 
+ * @author Arjay C Jesalva
+ * @since 2020-09-02
+ */ 
+
 @Controller
 @ApiIgnore
 public class DemoController {

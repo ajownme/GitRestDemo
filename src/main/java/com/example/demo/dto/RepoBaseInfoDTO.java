@@ -6,6 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+
+/**
+ * This DTO root class is use to hold the information of a github repository
+ * 
+ * @author Arjay C Jesalva
+ * @since 2020-09-02
+ */ 
+
+
 @Data
 public class RepoBaseInfoDTO {
 

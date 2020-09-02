@@ -24,6 +24,13 @@ import com.example.demo.dto.SearchDTO;
 import com.example.demo.dto.UserInfoDTO;
 import com.example.demo.service.GitRestService;
 
+/**
+ * This controller class defines the REST API endpoints that are expose to be consume
+ * 
+ * @author Arjay C Jesalva
+ * @since 2020-09-02
+ */
+
 @RestController
 public class APIController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(APIController.class);
