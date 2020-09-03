@@ -39,7 +39,6 @@ public class APIController {
 
 	@PostMapping("/search")
 	public ResponseEntity<RepoBaseInfoDTO> search(@RequestBody SearchDTO searchModel) {
-		LOGGER.info("Test here: {}", searchModel);
 		RepoBaseInfoDTO result = gitRestService.search(searchModel);
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -55,8 +54,6 @@ public class APIController {
 
 	@PostMapping("/get-latest-committer")
 	public ResponseEntity<Map<String, Long>> getLatestCommitter(@RequestParam String repository) {
-		LOGGER.info("getLatestCommitter here");
-		LOGGER.info("Controller Test here: {}", repository.toString());
 
 		List<CommitterDTO> committerDTOList = gitRestService.getLatestCommitterList(repository, 100);
 
@@ -75,8 +72,6 @@ public class APIController {
 
 	@PostMapping("/get-latest-timeline")
 	public ResponseEntity<List<CommitterDTO>> getLatestTimeline(@RequestParam String repository) {
-		LOGGER.info("getLatestCommitter here");
-		LOGGER.info("Controller Test here: {}", repository.toString());
 
 		List<CommitterDTO> result = gitRestService.getLatestCommitterList(repository, 100);
 
