@@ -69,19 +69,14 @@
 					page++;
 					searchAjax();
 				}
-				console.log("increPaging" + page);
-
 			}
 			function decrePaging(param) {
 				if (page > 1) {
 					page--;
 					searchAjax();
 				}
-				console.log("decrePaging" + page);
-
 			}
 			function analyticPageRequest(repoUrl) {
-				console.log("call analytic page here" + repoUrl);
 				var string = repoUrl;
 				var repo = string.substring(string.indexOf("com/") + 4);
 
@@ -100,8 +95,6 @@
 				document.getElementById("myBtn").disabled = false;
 			}
 			function searchAjax() {
-				console.log("page=" + page);
-				console.log("window.location=" + window.location + "search");
 				$.ajax("search", {
 					type: 'POST', 
 					data: JSON.stringify({
@@ -114,12 +107,10 @@
 					dataType: 'json',		
 					contentType: "application/json",
 					success: function (data) {
-						console.log("SUCCESS" + data);
 
 
 						var statusHTML = '';
 						$.each(data.items, function (rowIndex, rowData) {
-							console.log("rowIndex" + rowIndex);
 							statusHTML += '<tr class="rowlink">'
 							statusHTML += '<td><a class="dropdown-toggle rowlink" data-toggle="dropdown"'
 								+ 'style="text-decoration: none; color: inherit;"> ' + rowData.id + ' </a></td>';
@@ -154,10 +145,8 @@
 
 
 			$('#container').on('click', 'tr td div ul#act', function () {
-				console.log("check");
 				var $row = jQuery(this).closest('tr');
 				var $columns = $row.find('td a');
-				console.log("inneRme" + $columns[2].innerHTML);
 
 
 			});

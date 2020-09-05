@@ -144,8 +144,7 @@
 
 <body>
   <div class="container">
-  	<h1 th:text="'(Repository) https://github.com/' + ${repo} "></h1>
-	<p hidden="true" id="repoBase" th:text="${repo} "></p>
+  	<h1 th:text="'https://github.com/' + ${repo} "></h1>
 
 	<h4>Timeline of 100 latest commit</h4>
 	<br></br>
@@ -155,6 +154,9 @@
 
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script th:inline="javascript">
+	    var repo = [[${repo}]];
+	</script>
   <script>
     jQuery(document).ready(function ($) {
       getCommiterAjax();
@@ -165,7 +167,7 @@
       $.ajax("get-latest-timeline", {
         type: 'POST', 
         data: {
-          'repository': document.getElementById("repoBase").textContent
+          'repository': repo
         },
         dataType: 'json',		
         success: function (data) {
@@ -173,7 +175,6 @@
           var statusHTML = '';
           var i = 0;
           $.each(data, function (rowIndex, rowData) {
-            console.log("row:" + rowIndex + " data:" + JSON.stringify(rowData.commit.committer));
             if (i++ % 2 == 0) {
               statusHTML += '<div class="container left">'
             } else {
@@ -182,9 +183,9 @@
 
             statusHTML += '<div class="content">'
 
-            statusHTML += '<h2>' + rowData.commit.committer.date + '</h2>'
-            statusHTML += '<p>' + rowData.commit.committer.email + '</p>'
-            statusHTML += '<p>' + rowData.commit.committer.name + '</p>'
+            statusHTML += '<h2>Date: ' + rowData.commit.committer.date + '</h2>'
+            statusHTML += '<p>Name: ' + rowData.commit.committer.name + '</p>'
+            statusHTML += '<p>Email: ' + rowData.commit.committer.email + '</p>'
             statusHTML += '</div>'
             statusHTML += '</div>';
 

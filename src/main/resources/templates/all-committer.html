@@ -12,7 +12,6 @@
 
 	<div class="container">
 		<h1 th:text="'Repository= https://github.com/' + ${repo} "></h1>
-		<p hidden="true" id="repoBase" th:text="${repo} "></p>
 
 		<h4>List of all committer(user)</h4>
 		<br></br>
@@ -36,6 +35,9 @@
 		</div>
 	</div>
 
+	<script th:inline="javascript">
+	    var repo = [[${repo}]];
+	</script>
 		<script>
 			jQuery(document).ready(function ($) {
 				getCommiterAjax();
@@ -46,8 +48,6 @@
 					page++;
 					getCommiterAjax();
 				}
-				console.log("increPaging" + page);
-
 			}
 
 			function decrePaging(param) {
@@ -55,8 +55,6 @@
 					page--;
 					getCommiterAjax();
 				}
-				console.log("decrePaging" + page);
-
 			}
 
 
@@ -70,7 +68,7 @@
 				$.ajax("get-all-committer", {
 					type: 'POST', 
 					data: {
-						'repository': document.getElementById("repoBase").textContent,
+						'repository': repo,
 						'page': page
 					},
 					dataType: 'json',	
@@ -78,8 +76,6 @@
 
 						var statusHTML = '';
 						$.each(data, function (rowIndex, rowData) {
-							console.log("row:" + rowIndex + " data:" + JSON.stringify(rowData.commit.committer));
-
 							statusHTML += '<tr class="clickable-row"><a href="/greeting">';
 							statusHTML += '<td>'
 								+ rowData.commit.committer.name + '</td>';

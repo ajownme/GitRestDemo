@@ -12,7 +12,6 @@
 
 	<div class="container">
 		<h1 th:text="'(Repository)= https://github.com/' + ${repo} "></h1>
-		<p hidden="true" id="repoBase" th:text="${repo} "></p>
 
 		<h4>List of 100 latest committer(number of commits)</h4>
 		<br></br>
@@ -31,7 +30,9 @@
 			</table>
 		</div>
 	</div>
-
+	<script th:inline="javascript">
+	    var repo = [[${repo}]];
+	</script>
 		<script>
 			jQuery(document).ready(function ($) {
 				getCommiterAjax();
@@ -42,7 +43,7 @@
 				$.ajax("get-latest-committer", {
 					type: 'POST',
 					data: {
-						'repository': document.getElementById("repoBase").textContent
+						'repository': repo
 					},
 					dataType: 'json',	
 					success: function (data) {
